@@ -1,0 +1,14 @@
+{
+    "shortid": "H1uh6tqkX",
+    "name": "Footer",
+    "recipe": "chrome-pdf",
+    "engine": "handlebars",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1528001885426
+    },
+    "_id": "BNlstSdmvwi9OHzO",
+    "$entitySet": "templates"
+}

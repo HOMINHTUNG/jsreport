@@ -1,0 +1,14 @@
+{
+    "shortid": "SkWnptcy7",
+    "name": "Header",
+    "recipe": "chrome-pdf",
+    "engine": "handlebars",
+    "chrome": {
+        "printBackground": true
+    },
+    "modificationDate": {
+        "$$date": 1527592081072
+    },
+    "_id": "fkP2QOHSHPGoUHzq",
+    "$entitySet": "templates"
+}

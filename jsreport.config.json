@@ -1,0 +1,61 @@
+{
+  "extensions": {
+    "authentication": {
+      "cookieSession": {
+        "secret": "<your strong secret here>"
+      },
+      "admin": {
+        "username": "admin",
+        "password": "password"
+      },
+      "enabled": false
+    },
+    "scripts": {
+      "timeout": 6000000,
+      "strategy": "http-server"
+    },
+    "sample-template": {
+      "createSamples": true
+    }
+  },
+  "httpPort": 5488,
+  "store": {
+    "provider": "fs"
+  },
+  "blobStorage": {
+    "provider": "fs"
+  },
+  "logger": {
+    "console": {
+      "transport": "console",
+      "level": "debug"
+    },
+    "file": {
+      "transport": "file",
+      "level": "info",
+      "filename": "logs/reporter.log"
+    },
+    "error": {
+      "transport": "file",
+      "level": "error",
+      "filename": "logs/error.log"
+    }
+  },
+  "allowLocalFilesAccess": true,
+  "templatingEngines": {
+    "timeout": 6000000,
+    "strategy": "http-server"
+  },
+  "chrome": {
+	
+    "timeout": 600000
+  },
+  "tasks":{
+	"strategy": "http-server",
+	"timeout": 6000000
+  },
+  "express": {
+    "renderTimeout": 600000
+  }
+  
+}

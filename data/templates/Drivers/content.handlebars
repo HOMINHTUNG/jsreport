@@ -1,0 +1,576 @@
+<!--
+More complex example demonstrating advanced features like
+- using custom server script to fetch remote data
+- using custom modules in safe sandbox
+- panting a chart
+- using global helpers
+- merging custom dynamic header for each individual page
+
+Note: This example requires jsreport to be configured with
+{ "allowLocalFilesAccess": true } or
+{ "extensions": { "scripts": { "allowedModules": ["http"] } } }
+!-->
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metro/4.1.5/css/metro.min.css">
+    {{!--<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">--}}
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
+        {#asset style-custom.css @encoding=utf8}
+    
+        @font-face {
+        font-family: 'MyriadPro-Regular';
+        src: url({#asset MyriadPro-Regular.otf @encoding=dataURI});
+        format('woff');
+        }
+        
+        .footer-font-text {
+            font-family: 'MyriadPro-Regular';
+        }
+    </style>
+  </head>
+  <body>
+
+{{!--Page one: cover page--}}
+<div class="content-panel">
+    <img class="img-panel" src="{#asset panel_hcm.png @encoding=dataURI}">
+</div>
+
+{{!--Page two: chart page--}}
+{{!--Header chart page--}}
+{#child Header @template.recipe=html @options.language=sp}
+{{!--style="padding-bottom:230px"--}}
+<div class="content-chart" >
+     <div class="panel-heading bold" style="float:center">
+                       <p     style="text-align: center;font-size: 20px">DISTRIBUTIONS</p>
+     </div>
+    <div class="row row-margin-38" style="padding-top:45px">
+         <div class="column column-50"  width="700px" height="400px">
+            {{!--<div class="panel panel-table d-flex-col">--}}
+            {{!--    <div class="panel-heading bold" style="padding-left:120px;padding-bottom:20px">--}}
+            {{!--        Seat--}}
+            {{!--    </div>--}}
+            {{!--</div>--}}
+            <canvas id="pie-chart-seat"></canvas>
+        </div>
+          <div class="column column-50" width="700px" height="400px">
+            {{!--<div class="panel panel-table d-flex-col">--}}
+            {{!--    <div class="panel-heading bold" style="padding-left:115px;padding-bottom:20px">--}}
+            {{!--        Year--}}
+            {{!--    </div>--}}
+            {{!--</div>--}}
+            <canvas id="pie-chart-year"></canvas>
+        </div>
+    </div>
+ <div class="row row-margin-38" style="padding-left:125px;margin-top:30px;padding-right:125px">
+       <div class="column column-100" width="700px" height="200">
+            {{!--<div class="panel panel-table d-flex-col">--}}
+            {{!--    <div class="panel-heading bold" style="padding-left:200px;padding-bottom:20px">--}}
+            {{!--        Color--}}
+            {{!--    </div>--}}
+            {{!--</div>--}}
+            <canvas id="pie-chart-color"></canvas>
+        </div>
+    </div>
+    {{!--HN--}}
+    {{!--<div class="row row-margin-38"  style="padding-left:125px;margin-top:30px;padding-right:125px">--}}
+    <div class="row row-margin-38"  style="padding-left:80px;margin-top:30px;padding-right:80px">
+        <div class="column column-100" width="700px" height="250">
+            {{!--<div class="panel panel-table d-flex-col">--}}
+            {{!--    <div class="panel-heading bold" style="padding-left:230px;padding-bottom:20px">--}}
+            {{!--        Model--}}
+            {{!--    </div>--}}
+            {{!--</div>--}}
+            <canvas id="pie-chart-model"></canvas>
+            {{!--<div class="chart-legend" id="chart-legends-model"></div>--}}
+        </div>
+    </div>
+</div>
+{{!--Footer chart page--}}
+{#child Footer @template.recipe=html @options.language=sp @data.numberPage= {{numberPage}} }
+
+{{!--Page n: driver info page--}}   
+{{#each driversInfo}}
+{{!--Header body driver info--}}
+{#child Header @template.recipe=html @options.language=sp}
+
+<div class="content-body" style="padding-left:4px">
+    <div class="div-driver-info">
+        <div class="row row-margin-20">
+            <div class="column-50" style="padding-top:60px">
+                <div class="user-display-bottom d-flex-col flex-1">
+                    <div class="row user-display-avatar avatar" style="padding-left:10px">
+                        <img src="data:image/jpeg;base64,{{avatar}}">
+
+                        <div class="user-display-info">
+                            <div class="name ng-binding bold">
+                                {{last_name}} {{first_name}}
+                            </div>
+                            <div class="nick ng-binding">
+                                <span class="mdi mdi-account"></span>{{campaign_name}}
+                            </div>
+                            <div class="nick ng-binding">
+                                <span class="mdi mdi-account"></span>{{formatDateCampaign duration}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="user-display-details flex-1" style="margin-top:30px">
+                        <table class="full-width full-height">
+                            <tbody>
+                                <tr>
+                                    <td class="ng-binding bold">Car</td>
+                                    <td class="ng-binding bold">Year</td>
+                                    <td class="ng-binding bold">Color</td>
+                                    <td class="ng-binding bold">Seat</td>
+                                    <td class="ng-binding bold">Plate</td>
+                                </tr>
+                                <tr>
+                                    <td class="number ng-binding">{{carModelMake}} {{carModel}}</td>
+                                    <td class="number ng-binding">{{carModelYear}}</td>
+                                    <td class="number ng-binding">{{carModelColor}}</td>
+                                    <td class="number ng-binding">{{carModelSeat}}</td>
+                                    <td class="number ng-binding">{{license_plate}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="column-50" style="padding-right:20px">
+                <div class="panel panel-table d-flex-col">
+                    <div class="panel-heading bold">
+                        PERSONAL INFORMATION
+                    </div>
+                    <div class="panel-body p-0">
+                        <table class="full-width full-height">
+                            <tbody class="no-border-x">
+                                <tr>
+                                    <td class="ng-binding bold">Phone</td>
+                                    <td class="ng-binding"> (+84) {{phone}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="ng-binding bold">Email</td>
+                                    <td class="ng-binding">{{email}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="ng-binding bold">Address</td>
+                                    <td class="ng-binding">{{address}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="ng-binding bold">Status</td>
+                                    <td class="ng-binding">Active </td>
+                                </tr>
+                                <tr>
+                                    <td class="ng-binding bold">Campaign</td>
+                                    <td class="ng-binding">{{campaign_name}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="div-photo-info" style="padding-top:20px">
+        <div class="row row-margin-38">
+            <div class="column left">
+                <img class="imgCar" src="data:image/jpeg;base64,{{car_image}}">
+            </div>
+            <div class="column middle" style="padding-left:6px">
+                <div class="column" style="padding-bottom:7px;padding-right:4px">
+                    <img src="data:image/jpeg;base64,{{car_front}}">
+                </div>
+                <div class="column" style="padding-top:7px;padding-right:4px">
+                    <img src="data:image/jpeg;base64,{{car_back}}">
+                </div>
+            </div>
+            <div class="column right" style="padding-left:6px">
+                <div class="column" style="padding-bottom:7px;padding-left:4px">
+                    <img src="data:image/jpeg;base64,{{car_right}}">
+                </div>
+                <div class="column" style="padding-top:7px;padding-left:4px">
+                    <img src="data:image/jpeg;base64,{{car_left}}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="content-photo">
+        <div class="row row-margin-38" style="margin-top:4px;margin-bottom:10px">
+            <div class="panel panel-default panel-table flex-column full-width">
+                <div class="panel-heading bold" style="padding-left:1px">
+                    PHOTO
+                    </font></font><div class="tools">
+                        <span class="icon mdi mdi-download"></span>
+                        <span class="icon mdi mdi-more-vert"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-margin-38">
+            <div class="column-50" style="padding-right:10px">
+                <img class="imgCar-request" src={{photo_requests.[0].image}}>
+
+            </div>
+            <div class="column-50" style="padding-left:7px">
+                <img class="imgCar-request-fix" src={{photo_requests.[1].image}}>
+            </div>
+
+        </div>
+
+        <div class="row row-margin-38">
+            <div class="column left" style="padding-right:8px">
+                <div class="user-display-details">
+                    <table class="full-width full-height">
+                        <tbody>
+                            <tr>
+
+                                <td class="ng-binding bold">Description</td>
+                                <td class="ng-binding bold">Requested</td>
+                                <td class="ng-binding bold">Submitted</td>
+                            </tr>
+                            <tr>
+
+                                <td width="36%" class="number ng-binding">{{photo_requests.[0].note}}</td>
+                                <td width="32%" class="number ng-binding">{{photo_requests.[0].time_request}}</td>
+                                <td width="32%" class="number ng-binding">{{photo_requests.[0].time_response}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="column left" style="padding-left:7px">
+
+                <div class="user-display-details">
+                    <table class="full-width full-height">
+                        <tbody>
+                            <tr>
+
+                                <td class="ng-binding bold">Description</td>
+                                <td class="ng-binding bold">Requested</td>
+                                <td class="ng-binding bold">Submitted</td>
+                            </tr>
+                            <tr>
+
+                                <td width="36%" class="number ng-binding">{{photo_requests.[1].note}}</td>
+                                <td width="32%" class="number ng-binding">{{photo_requests.[1].time_request}}</td>
+                                <td width="32%" class="number ng-binding">{{photo_requests.[1].time_response}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{{!--Footer body driver info--}}
+{#child Footer @template.recipe=html @options.language=sp @data.numberPage= {{numberPage}} }
+<div style='page-break-after: always;'></div>
+{{/each}}
+    
+{{!--Script chart--}}
+<script>
+    var dataChartColor =  {{{toJSON charts.listColor}}};
+    new Chart(document.getElementById("pie-chart-color"), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(dataChartColor).map(function (o) {
+                return dataChartColor[o].data;
+            }),
+            datasets: [{
+                label: "Legend (color)",
+                backgroundColor: Object.keys(dataChartColor).map(function (o) {
+                    return dataChartColor[o].code;
+                }),
+                data: Object.keys(dataChartColor).map(function (o) {
+                    return dataChartColor[o].value;
+                })
+            }]
+        },
+        options: {
+            animation: {
+                onComplete: function () {
+                    // set the PDF printing trigger when the animation is done
+                    // to have this working, the phantom-pdf menu in the left must
+                    // have the wait for printing trigger option selected
+                    window.JSREPORT_READY_TO_START = true
+                    // var ctx = this.chart.ctx;
+                    // ctx.font = Chart.helpers.fontString('MyriadPro-Regular', 'normal', 'MyriadPro-Regular');
+                    // ctx.textAlign = 'center';
+                    // ctx.textBaseline = 'bottom';
+
+                    // this.data.datasets.forEach(function (dataset) {
+
+                    //     for (var i = 0; i < dataset.data.length; i++) {
+                    //         var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+                    //             total = dataset._meta[Object.keys(dataset._meta)[0]].total,
+                    //             mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
+                    //             start_angle = model.startAngle,
+                    //             end_angle = model.endAngle,
+                    //             mid_angle = start_angle + (end_angle - start_angle)/2;
+
+                    //         var x = mid_radius * Math.cos(mid_angle);
+                    //         var y = mid_radius * Math.sin(mid_angle);
+
+                    //         ctx.fillStyle = '#000000';
+
+                    //         var percent = String(Math.round(dataset.data[i]/total*100)) + "%";
+                    //         //   ctx.fillText(dataset.data[i], model.x + x, model.y + y);
+                    //         // Display percent in another line, line break doesn't work for fillText
+                    //         ctx.fillText(percent, model.x + x, model.y + y + 15);
+                    //     }
+                    // });
+                }
+            },
+            // maintainAspectRatio: false,
+            // responsive: false,
+             title: {
+            display: true,
+            text: 'Color'
+        },
+            legend: {
+                display: true,
+                position:'bottom',
+                labels: {
+                    boxWidth: 15
+                }
+                // labels: {
+                //     lable: "tung",
+                //     fontColor: 'rgb(255, 99, 132)'
+                // }
+            }
+        }
+    });
+
+    var dataChartYear =  {{{toJSON charts.listYear}}};
+    new Chart(document.getElementById("pie-chart-year"), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(dataChartYear).map(function (o) {
+                return dataChartYear[o].data;
+            }),
+            datasets: [{
+                label: 'Legend (color)',
+                backgroundColor: Object.keys(dataChartYear).map(function (o) {
+                    return dataChartYear[o].code;
+                }),
+                data: Object.keys(dataChartYear).map(function (o) {
+                    return dataChartYear[o].value;
+                })
+            }]
+        },
+        options: {
+            animation: {
+                onComplete: function () {
+                    // set the PDF printing trigger when the animation is done
+                    // to have this working, the phantom-pdf menu in the left must
+                    // have the wait for printing trigger option selected
+                    window.JSREPORT_READY_TO_START = true
+                    // var ctx = this.chart.ctx;
+                    // ctx.font = Chart.helpers.fontString('MyriadPro-Regular', 'normal', 'MyriadPro-Regular');
+                    // ctx.textAlign = 'center';
+                    // ctx.textBaseline = 'bottom';
+
+                    // this.data.datasets.forEach(function (dataset) {
+
+                    //     for (var i = 0; i < dataset.data.length; i++) {
+                    //         var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+                    //             total = dataset._meta[Object.keys(dataset._meta)[0]].total,
+                    //             mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
+                    //             start_angle = model.startAngle,
+                    //             end_angle = model.endAngle,
+                    //             mid_angle = start_angle + (end_angle - start_angle)/2;
+
+                    //         var x = mid_radius * Math.cos(mid_angle);
+                    //         var y = mid_radius * Math.sin(mid_angle);
+
+                    //         ctx.fillStyle = '#000000';
+
+                    //         var percent = String(Math.round(dataset.data[i]/total*100)) + "%";
+                    //         //   ctx.fillText(dataset.data[i], model.x + x, model.y + y);
+                    //         // Display percent in another line, line break doesn't work for fillText
+                    //         ctx.fillText(percent, model.x + x, model.y + y + 15);
+                    //     }
+                    // });
+                }
+            },
+            title: {
+            display: true,
+            text: 'Year'
+        },
+            //  maintainAspectRatio: false,
+            // responsive: false,
+            legend: {
+                display: true,
+                position:'right',
+                labels: {
+                    boxWidth: 15
+                }
+                // labels: {
+                //     lable: "tung",
+                //     fontColor: 'rgb(255, 99, 132)'
+                // }
+            }
+        }
+    });
+    var dataChartModel =  {{{toJSON charts.listModel}}};
+    var ChartModel = new Chart(document.getElementById("pie-chart-model"), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(dataChartModel).map(function (o) {
+                return dataChartModel[o].data;
+            }),
+            datasets: [{
+                label: "Legend (color)",
+                backgroundColor: Object.keys(dataChartModel).map(function (o) {
+                    return dataChartModel[o].code;
+                }),
+                data: Object.keys(dataChartModel).map(function (o) {
+                    return dataChartModel[o].value;
+                })
+            }]
+        },
+        options: {
+            animation: {
+                onComplete: function () {
+                    // set the PDF printing trigger when the animation is done
+                    // to have this working, the phantom-pdf menu in the left must
+                    // have the wait for printing trigger option selected
+                    window.JSREPORT_READY_TO_START = true
+                    // var ctx = this.chart.ctx;
+                    // ctx.font = Chart.helpers.fontString('MyriadPro-Regular', 'normal', 'MyriadPro-Regular');
+                    // ctx.textAlign = 'center';
+                    // ctx.textBaseline = 'bottom';
+                    
+                    // this.data.datasets.forEach(function (dataset) {
+
+                    //     for (var i = 0; i < dataset.data.length; i++) {
+                    //         var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+                    //             total = dataset._meta[Object.keys(dataset._meta)[0]].total,
+                    //             mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
+                    //             start_angle = model.startAngle,
+                    //             end_angle = model.endAngle,
+                    //             mid_angle = start_angle + (end_angle - start_angle)/2;
+
+                    //         var x = mid_radius * Math.cos(mid_angle);
+                    //         var y = mid_radius * Math.sin(mid_angle);
+
+                    //         ctx.fillStyle = '#000000';
+
+                    //         var percent = String(Math.round(dataset.data[i]/total*100)) + "%";
+                    //         //   ctx.fillText(dataset.data[i], model.x + x, model.y + y);
+                    //         // Display percent in another line, line break doesn't work for fillText
+                    //         ctx.fillText(percent, model.x + x, model.y + y + 15);
+                    //     }
+                    // });
+                }
+            },
+            title: {
+            display: true,
+            text: 'Model'
+        },
+            //  maintainAspectRatio: false,
+            // responsive: false,
+             legend: {
+                display: true,
+                position:'bottom',
+               
+                labels: {
+                    boxWidth: 15
+                }
+            },
+            
+        }
+    });
+
+    // document.getElementById('chart-legends-model').innerHTML = ChartModel.generateLegend();
+    
+    
+    var dataChartSeat =  {{{toJSON charts.listSeat}}};
+    new Chart(document.getElementById("pie-chart-seat"), {
+        type: 'pie',
+        data: {
+            labels: Object.keys(dataChartSeat).map(function (o) {
+                return dataChartSeat[o].data;
+            }),
+            datasets: [{
+                label: "Legend (color)",
+                backgroundColor: Object.keys(dataChartSeat).map(function (o) {
+                    return dataChartSeat[o].code;
+                }),
+                data: Object.keys(dataChartSeat).map(function (o) {
+                    return dataChartSeat[o].value;
+                })
+            }]
+        },
+        options: {
+            animation: {
+                onComplete: function () {
+                    // set the PDF printing trigger when the animation is done
+                    // to have this working, the phantom-pdf menu in the left must
+                    // have the wait for printing trigger option selected
+                    window.JSREPORT_READY_TO_START = true
+                    // var ctx = this.chart.ctx;
+                    // ctx.font = Chart.helpers.fontString('MyriadPro-Regular', 'normal', 'MyriadPro-Regular');
+                    // ctx.textAlign = 'center';
+                    // ctx.textBaseline = 'bottom';
+
+                    // this.data.datasets.forEach(function (dataset) {
+
+                    //     for (var i = 0; i < dataset.data.length; i++) {
+                    //         var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model,
+                    //             total = dataset._meta[Object.keys(dataset._meta)[0]].total,
+                    //             mid_radius = model.innerRadius + (model.outerRadius - model.innerRadius)/2,
+                    //             start_angle = model.startAngle,
+                    //             end_angle = model.endAngle,
+                    //             mid_angle = start_angle + (end_angle - start_angle)/2;
+
+                    //         var x = mid_radius * Math.cos(mid_angle);
+                    //         var y = mid_radius * Math.sin(mid_angle);
+
+                    //         ctx.fillStyle = '#000000';
+
+                    //         var percent = String(Math.round(dataset.data[i]/total*100)) + "%";
+                    //         //   ctx.fillText(dataset.data[i], model.x + x, model.y + y);
+                    //         // Display percent in another line, line break doesn't work for fillText
+                    //         ctx.fillText(percent, model.x + x, model.y + y + 15);
+                    //     }
+                    // });
+                }
+            },
+            // maintainAspectRatio: false,
+            // responsive: false,
+            title: {
+            display: true,
+            text: 'Seat'
+        },
+            legend: {
+                display: true,
+                position:'left',
+                labels: {
+                    boxWidth: 15
+                }
+                // labels: {
+                //     lable: "tung",
+                //     fontColor: 'rgb(255, 99, 132)'
+                // }
+            }
+        }
+    });
+</script>  
+</body>
+</html>

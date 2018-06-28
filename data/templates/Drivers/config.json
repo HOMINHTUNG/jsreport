@@ -1,0 +1,35 @@
+{
+    "shortid": "ryX56z7JX",
+    "name": "Drivers",
+    "recipe": "chrome-pdf",
+    "engine": "handlebars",
+    "chrome": {
+        "printBackground": true,
+        "displayHeaderFooter": false,
+        "format": "A4",
+        "marginBottom": "",
+        "marginLeft": "",
+        "marginRight": "",
+        "marginTop": "",
+        "height": "",
+        "width": "",
+        "landscape": false,
+        "waitForNetworkIddle": false,
+        "waitForJS": true
+    },
+    "modificationDate": {
+        "$$date": 1528081029622
+    },
+    "_id": "71LxpY84UYTRcBwX",
+    "$entitySet": "templates",
+    "scripts": [
+        {
+            "shortid": "HyvwafmJ7"
+        }
+    ],
+    "phantom": {
+        "blockJavaScript": false,
+        "waitForJS": true,
+        "fitToPage": false
+    }
+}
