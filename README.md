@@ -28,6 +28,8 @@ start jsreport:
 
 <img src="https://i.imgur.com/S4rZ6cN.png">
 
+<img src="https://i.imgur.com/AGywPTr.png">
+
 ## Usage
 
 ```javascript
