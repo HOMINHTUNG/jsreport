@@ -6,7 +6,7 @@ const request = require('request');
 function fetchToken() {
 	// Setting URL and headers for request
     var options = {
-        url: 'http://45.32.112.165:12356/auth/operator/login',
+        url: 'http://000.000.000.000:12356/auth/operator/login',
         headers: {
             'User-Agent': 'request',
             'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ async function checkLogin() {
 function fetchDrivers(login) {
 	// Setting URL and headers for request
     var options = {
-        url: 'http://45.32.112.165:12356/driver/drivers-in-campaign',
+        url: 'http://000.000.000.000:12356/driver/drivers-in-campaign',
         headers: {
             'User-Agent': 'request',
              'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ function fetchDrivers(login) {
 function fetchDriversInfo(login,id_driver) {
 	// Setting URL and headers for request
     var options = {
-        url: 'http://45.32.112.165:12356/api/driver/'+id_driver,
+        url: 'http://000.000.000.000:12356/api/driver/'+id_driver,
         headers: {
             'User-Agent': 'request',
             'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ function fetchDriversInfo(login,id_driver) {
 function fetchDriversPhoto(login,id_driver) {
 	// Setting URL and headers for request
     var options = {
-        url: 'http://45.32.112.165:12356/api/photo-request/accepted/' + id_driver,
+        url: 'http://000.000.000.000:12356/api/photo-request/accepted/' + id_driver,
         headers: {
             'User-Agent': 'request',
             'Content-Type': 'application/json',
