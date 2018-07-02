@@ -10,6 +10,10 @@ No dependency on a specific platform or language. Just connect to the server and
 
 Excample export PDF:
 
+<img src="https://i.imgur.com/Dp16F3o.png">
+
+<img src="https://i.imgur.com/dgeYiG7.png">
+
 <img src="https://i.imgur.com/TrmiQbw.png">
 
 ## Setup
