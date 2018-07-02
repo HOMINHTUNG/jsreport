@@ -9,17 +9,20 @@ Just code, just javascript and html. This is enough to create pdf or excel with 
 No dependency on a specific platform or language. Just connect to the server and use REST API to render a report.
 
 Excample export PDF:
-<img src="https://i.imgur.com/TrmiQbw.png" width="400px" height="700px">
+
+<img src="https://i.imgur.com/TrmiQbw.png">
 
 ## Setup
 
 Server Nodejs (download environment): https://nodejs.org/en/
 
 jsreport:
-<img src="https://i.imgur.com/zwWeg3R.png" width="400px" height="700px">
+
+<img src="https://i.imgur.com/zwWeg3R.png">
 
 start jsreport:
-<img src="https://i.imgur.com/S4rZ6cN.png" width="400px" height="700px">
+
+<img src="https://i.imgur.com/S4rZ6cN.png">
 
 ## Usage
 
